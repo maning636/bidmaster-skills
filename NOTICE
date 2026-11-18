@@ -1,93 +1,115 @@
 NOTICE
 ======
 
-本项目：老马标书贤内助（laoma-bid）
-当前许可：MIT License（见 LICENSE）
+本项目：bidmaster-skills（「老马标书贤内助」的开源子集）
+Copyright (c) 2026 老马标书贤内助项目组
 
-────────────────────────────────────────
-第三方组件与许可
-────────────────────────────────────────
+当前许可：GNU Affero General Public License v3.0 (AGPL-3.0)
+          全文见仓库根目录 LICENSE。
 
-1. 本项目在开发过程中参考/使用了以下项目的部分代码或设计，按其许可要求保留声明：
-
-   Portions Copyright (c) 2026 BidMaster Team
-   SPDX-License-Identifier: MIT
-
-   Permission is hereby granted, free of charge, to any person obtaining a copy
-   of this software and associated documentation files (the "Software"), to deal
-   in the Software without restriction, including without limitation the rights
-   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-   copies of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be included in all
-   copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-   SOFTWARE.
-
-2. 其余第三方依赖（FastAPI、SQLAlchemy、python-docx、PyMuPDF 等）的许可清单见下节。
+若本文件与 LICENSE 冲突，以 LICENSE 为准；
+若本文件与实际源码派生关系冲突，以实际源码派生审计为准。
 
 ================================================================================
-3. 其他第三方依赖（主要运行时依赖及其上游许可）
+1. 上游归属（AGPL-3.0）
 ================================================================================
-  下表按 pyproject.toml 的 dependencies 清单整理；许可信息以各
-  上游项目自身 LICENSE 文件为准，此处仅作快速索引。
 
-  核心 Web / API 栈
-    fastapi                     MIT
-    uvicorn                     BSD-3-Clause
-    sqlalchemy                  MIT        (>=1.4)
-    aiosqlite                   MIT
-    asyncpg                     Apache-2.0
-    aiomysql                    MIT
-    alembic                     MIT
-    pydantic                    MIT
-    pydantic-settings           MIT
-    httpx                       BSD-3-Clause
-    tenacity                    Apache-2.0
-    python-multipart            Apache-2.0
+  项目：BidMaster-Pro
+  来源：https://github.com/guangshu100/BidMaster-Pro
+  许可：GNU Affero General Public License v3.0 (AGPL-3.0)
+  关系：代码派生
 
-  LLM / Agent 编排
-    openai                      Apache-2.0
-    litellm                     MIT
-    langgraph                   MIT
-    langchain-core              MIT
-    chromadb                    Apache-2.0
-    sentence-transformers       Apache-2.0
-    fastmcp                     Apache-2.0
+  说明：
 
-  文档 / 表格 / PDF / OCR
+    本仓库的 `skill_engine/`、`skills/docx_format/` 与 `utils/json_repair.py`
+    派生自上述上游项目（经由「老马标书贤内助」主仓的对应模块）。
+
+    派生关系以主仓源码审计工具的实测结果为准。主仓审计口径：
+
+      * 归一化文本相似度 >= 0.60  → 记为「实质派生」
+      * 归一化文本相似度 >= 0.95  → 记为「几乎逐字相同」
+      * 上述任一指标命中即视为 AGPL 义务仍在生效
+
+    主仓实测数据（详见主仓 `docs/architecture/decisions/0001-agpl-compliance-strategy.md`
+    与血统审计全文）：
+
+      | 文件                              | 与上游相似度 | 档位 |
+      |-----------------------------------|-------------:|:----:|
+      | core/skill_engine/base.py         |       0.5909 |  C   |
+      | core/skill_engine/registry.py     |       0.5610 |  C   |
+      | core/skill_engine/loader.py       |       0.5310 |  C   |
+      | services/format/skills/docx_format_skill.py | 0.4596 | C |
+
+    因存在上述派生关系，本仓库**整体许可必须为 AGPL-3.0**，不得改为 MIT
+    或其他更宽松的许可。这是事实性约束，不是口径选择。
+
+================================================================================
+2. 本仓库包含什么 / 不包含什么
+================================================================================
+
+  包含（均为不依赖大模型的通用能力）：
+
+    - `skill_engine/`          技能引擎（基类 / 注册表 / 加载器 / 异常）
+    - `skills/docx_format/`    Word 排版（check / format / diff / beautify）
+    - `skills/anon_bid_clean/` 文档属性与主体名称脱敏
+    - `skills/rules_screen/`   规则包筛选
+    - `skills/pricing_check/`  报价算术核查
+    - `skills/risk_score/`     六维风险评分
+    - `skills/selfcheck_list/` 自检清单生成
+    - `skills/self_score/`     自评分
+    - `skills/check_report_export/` 检查报告导出
+    - `rules_engine/`          规则包读取与过滤
+    - `pathkit/`               路径解析
+    - `utils/json_repair.py`   坏 JSON 修复
+
+  不包含（这些运行在服务端，不在本仓库）：
+
+    - 招标文件 AI 解读的提示词与维度表
+    - 投标文件 AI 生成的提示词
+    - 围串标六维检测的阈值与权重
+    - 私有知识库检索能力
+    - 多 Agent 编排
+    - 授权与发码策略
+
+  说明：本仓库是「老马标书贤内助」的开源子集。商业能力与提示词资产
+  不在本仓库范围内，但这**不改变**本仓库自身的 AGPL-3.0 许可义务。
+
+================================================================================
+3. 运行时依赖及其上游许可
+================================================================================
+
+  下表按 pyproject.toml 的 dependencies 清单整理；许可信息以各上游项目
+  自身 LICENSE 文件为准，此处仅作快速索引。
+
+  核心运行时
+
     python-docx                 MIT
-    openpyxl                    MIT
-    pdfplumber                  MIT
-    pypdfium2                   Apache-2.0  （PDF 解析主用，替代 PyMuPDF）
-                                 绑定生成代码为 BSD-3-Clause；其捆绑的
-                                 PDFium 本体为 Apache-2.0 或 BSD-3-Clause
-                                 二选一，由使用者自选
-    rapidocr_onnxruntime        Apache-2.0   （OCR 主用，替代 tesseract）
-    onnxruntime                 MIT
-    reportlab                   BSD-3-Clause （docx → PDF 渲染后端）
-    mammoth                     BSD-2-Clause
-    beautifulsoup4              MIT
-    chardet                     0BSD       （当前版本 7.x 为 0BSD 重写；
-                                              6.x 及更早版本为 LGPL-2.1）
-    jieba                       MIT
+    lxml                        BSD-3-Clause
     pyyaml                      MIT
-    weasyprint                  BSD-3-Clause
-    jinja2                      BSD-3-Clause
-    cryptography                Apache-2.0 / BSD-3-Clause 双许可
-    pywin32                     PSF License
 
-  异步 / 队列 / 缓存
-    celery                      BSD-3-Clause
-    redis                       MIT
+  开发 / 测试
 
-  观测 / 通知 / 其他
-    loguru                      MIT
-    apprise                     BSD-2-Clause
+    pytest                      MIT
+    pytest-asyncio              Apache-2.0
+    ruff                        MIT
+
+================================================================================
+4. AGPL-3.0 义务提示（给使用者）
+================================================================================
+
+  若你**分发**本仓库代码（含修改后的版本、含打包进你的产品），
+  AGPL-3.0 要求你：
+
+    1. 保留本 NOTICE 与 LICENSE，不得移除上游归属声明；
+    2. 向接收者提供**完整对应源代码**；
+    3. 以 AGPL-3.0 许可你的修改版本。
+
+  若你**通过网络提供服务**（SaaS 形态），AGPL-3.0 第 13 条要求你向
+  服务使用者提供获取对应源代码的方式。
+
+  仅在组织内部使用、不对外分发、不对外提供网络服务时，
+  上述分发义务不触发。
+
+  这不是法律意见。商用前请咨询你自己的法律顾问。
+
+================================================================================

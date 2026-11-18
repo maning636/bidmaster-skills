@@ -4,7 +4,8 @@ version = "0.1.0"
 description = "投标文档处理技能集：技能引擎 + docx 排版 + 大模型坏 JSON 修复"
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "AGPL-3.0" }
+license = "AGPL-3.0-only"
+license-files = ["LICENSE"]
 authors = [{ name = "老马标书贤内助" }]
 keywords = ["bidding", "tender", "docx", "rtf", "skill-engine", "llm", "json-repair", "招投标", "标书", "排版"]
 dependencies = [
