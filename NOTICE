@@ -1,0 +1,93 @@
+NOTICE
+======
+
+本项目：老马标书贤内助（laoma-bid）
+当前许可：MIT License（见 LICENSE）
+
+────────────────────────────────────────
+第三方组件与许可
+────────────────────────────────────────
+
+1. 本项目在开发过程中参考/使用了以下项目的部分代码或设计，按其许可要求保留声明：
+
+   Portions Copyright (c) 2026 BidMaster Team
+   SPDX-License-Identifier: MIT
+
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+2. 其余第三方依赖（FastAPI、SQLAlchemy、python-docx、PyMuPDF 等）的许可清单见下节。
+
+================================================================================
+3. 其他第三方依赖（主要运行时依赖及其上游许可）
+================================================================================
+  下表按 pyproject.toml 的 dependencies 清单整理；许可信息以各
+  上游项目自身 LICENSE 文件为准，此处仅作快速索引。
+
+  核心 Web / API 栈
+    fastapi                     MIT
+    uvicorn                     BSD-3-Clause
+    sqlalchemy                  MIT        (>=1.4)
+    aiosqlite                   MIT
+    asyncpg                     Apache-2.0
+    aiomysql                    MIT
+    alembic                     MIT
+    pydantic                    MIT
+    pydantic-settings           MIT
+    httpx                       BSD-3-Clause
+    tenacity                    Apache-2.0
+    python-multipart            Apache-2.0
+
+  LLM / Agent 编排
+    openai                      Apache-2.0
+    litellm                     MIT
+    langgraph                   MIT
+    langchain-core              MIT
+    chromadb                    Apache-2.0
+    sentence-transformers       Apache-2.0
+    fastmcp                     Apache-2.0
+
+  文档 / 表格 / PDF / OCR
+    python-docx                 MIT
+    openpyxl                    MIT
+    pdfplumber                  MIT
+    pypdfium2                   Apache-2.0  （PDF 解析主用，替代 PyMuPDF）
+                                 绑定生成代码为 BSD-3-Clause；其捆绑的
+                                 PDFium 本体为 Apache-2.0 或 BSD-3-Clause
+                                 二选一，由使用者自选
+    rapidocr_onnxruntime        Apache-2.0   （OCR 主用，替代 tesseract）
+    onnxruntime                 MIT
+    reportlab                   BSD-3-Clause （docx → PDF 渲染后端）
+    mammoth                     BSD-2-Clause
+    beautifulsoup4              MIT
+    chardet                     0BSD       （当前版本 7.x 为 0BSD 重写；
+                                              6.x 及更早版本为 LGPL-2.1）
+    jieba                       MIT
+    pyyaml                      MIT
+    weasyprint                  BSD-3-Clause
+    jinja2                      BSD-3-Clause
+    cryptography                Apache-2.0 / BSD-3-Clause 双许可
+    pywin32                     PSF License
+
+  异步 / 队列 / 缓存
+    celery                      BSD-3-Clause
+    redis                       MIT
+
+  观测 / 通知 / 其他
+    loguru                      MIT
+    apprise                     BSD-2-Clause
