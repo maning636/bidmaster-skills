@@ -1,131 +1,204 @@
 # bidmaster-skills
 
-**投标文档处理的技能集**：技能引擎 + Word 排版 + 大模型坏 JSON 修复。从「老马标书贤内助」抽出的开源子集，可独立 `pip install` 使用，也可作为你自己产品的技能底座。
+**投标文档处理的技能集** —— 8 个技能，全部不依赖大模型，可完全离线运行。
+
+做招投标 / 投标文件自动化时，有一堆脏活没人愿意重写：Word 排版、暗标脱敏、报价算术核查、格式一致性检查……这个库把它们做成**可组合的技能**，`pip install` 后直接调用。
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-pytest-informational)](tests/)
-
-> 如果这个库帮你省了时间，**点个 Star** 就是最好的支持 —— 也方便你下次找到它。
+[![Tests](https://img.shields.io/badge/tests-81%20passed-brightgreen)](tests/)
+[![LLM](https://img.shields.io/badge/LLM-not%20required-success)](README.md)
 
 ---
 
-## 这个库解决什么问题
+## 为什么值得一看
 
-做招投标 / 投标文件（标书）自动化时，有一堆脏活没人愿意重写：
-
-| 脏活 | 本库的方案 |
+| 常见痛点 | 本库的解法 |
 |---|---|
-| Word 排版不可控：字体、字号、缩进、行距、页码，人工抄格式必出错 | `docx_format`：四种模式（排版 / 格式检查 / 与模板对比 / XML 美化），可量化报告「哪一段字体不对」 |
-| 大模型返回的 JSON 十次有一次是坏的（尾逗号、裸键、被 `<think>` 包裹） | `utils/json_repair`：多候选修复 + 逐级降级，不抛异常 |
-| 报价算术错误、大小写金额不符、单位×数量≠合价，人工核必漏 | `pricing_check`：四类算术规则一次跑完 |
-| 投标文件带出公司名、作者、修订记录，暗标场景直接废标 | `anon_bid_clean`：文档属性与主体名称脱敏 |
-| 检查结果散在十几个地方，没法交给人看 | `check_report_export`：导出结构化检查报告 |
-| 自检靠人列清单，每次重来 | `selfcheck_list`：按检查结果自动生成自检清单 |
-| 规则散在代码里，改一条要发版 | `rules_screen`：规则包 JSON 驱动，改规则不改代码 |
-| 风险靠感觉，说不清哪一维高风险 | `risk_score`：六维评分 |
-| 技能散落各处、注册靠手写 import | `skill_engine`：按 `SKILL.md` 目录布局自动发现、注册、按分类查询 |
+| Word 排版不可控：字体、字号、缩进、行距、页码，人工抄格式必出错 | `docx_format` 四种模式（排版 / 格式检查 / 模板对比 / XML 美化），能报告「哪一段字体不对」 |
+| 投标文件带出公司名、作者、修订记录，暗标场景直接废标 | `anon_bid_clean` 扫描文档属性、页眉页脚 Logo、正文公司名、docProps |
+| 报价表算术错误：单价×数量≠合价、大写小写不一致、超限价 | `pricing_check` 四类规则一次跑完，报出具体行号 |
+| 检查结果散在十几个地方，没法交给人看 | `check_report_export` 渲染成 Markdown / HTML / 文本报告 |
+| 自检靠人列清单，每次重来 | `selfcheck_list` 按检查结果自动生成清单，标出哪些还没过 |
+| 规则散在代码里，改一条要发版 | `rules_screen` 规则包 JSON 驱动，改规则不改代码 |
+| 风险靠感觉，说不清哪一维高风险 | `risk_score` 六维加权评分 |
+| 大模型返回的 JSON 十次有一次是坏的 | `utils/json_repair` 多候选修复 + 逐级降级，不抛异常 |
 
-## 技能清单
+## 8 个技能
 
-全部 **8 个技能都不依赖大模型**，可完全离线运行。
+全部 **零大模型依赖**，可完全离线运行。
 
-| 技能 | 行数 | 作用 | 输入 |
+| 技能 | 行数 | 作用 | 第三方依赖 |
 |---|---:|---|---|
-| `docx_format` | 947 | Word 排版 / 格式检查 / 模板对比 / XML 美化 | `.docx` 路径 + `mode` |
-| `anon_bid_clean` | 501 | 文档属性与主体名称脱敏 | `.docx` 路径 或 文本 |
-| `rules_screen` | 290 | 规则包筛选（JSON 驱动） | 规则包 + 待筛内容 |
-| `check_report_export` | 244 | 检查报告导出 | 检查结果 dict + 格式 |
-| `risk_score` | 210 | 六维风险评分 | 各维度检查结果 |
-| `pricing_check` | 186 | 报价算术核查（限价/大小写/单价×数量/安全区间） | 招标与投标文本 |
-| `selfcheck_list` | 168 | 自检清单生成 | 检查结果 dict |
-| `self_score` | 83 | 自评分 | 评分行 + 得分块 |
+| `docx_format` | 947 | Word 排版 / 格式检查 / 模板对比 / XML 美化 | python-docx |
+| `anon_bid_clean` | 501 | 文档属性与主体名称脱敏 | python-docx |
+| `rules_screen` | 290 | 规则包筛选（JSON 驱动） | — |
+| `check_report_export` | 244 | 检查报告导出（Markdown/HTML/文本） | — |
+| `risk_score` | 210 | 六维加权风险评分 | — |
+| `pricing_check` | 186 | 报价算术核查（限价/大写/单价×数量/安全区间） | — |
+| `selfcheck_list` | 168 | 自检清单生成 | — |
+| `self_score` | 83 | 自评分估算 | — |
 
 另有三个基础包：`skill_engine/`（技能引擎）、`rules_engine/`（规则包读写）、`pathkit/`（路径解析）。
 
-每个技能的契约见其目录下的 `SKILL.md`。
+每个技能的完整契约见其目录下的 `SKILL.md`。
+
+## 安装
+
+```bash
+pip install git+https://github.com/maning636/bidmaster-skills.git
+```
+
+第三方依赖只有 `python-docx` / `lxml` / `PyYAML`（后两个是 python-docx 的依赖）。
 
 ## 快速开始
 
-```bash
-pip install -e .
-```
-
-### 1. 跑一个技能
+### 报价算术核查（零依赖，最容易试）
 
 ```python
 import asyncio
-from skill_engine.loader import SkillLoader
-from skill_engine.registry import SkillRegistry
 from skill_engine.base import SkillContext
+from skills.pricing_check import PricingCheckSkill
 
-loader = SkillLoader("examples")   # 布局：<root>/<category>/<skill>/SKILL.md
-meta = loader.load_all()
-for key in meta:
-    SkillRegistry.instance().register(loader.get_skill_class(key))
+bid_text = """
+投标总价：98.5万
+总金额：玖拾捌万伍仟元（985000）
+1. 服务器 12.50 × 8 = 100.00
+2. 交换机 3.20 × 10 = 35.00
+"""
 
-skill = SkillRegistry.instance().get("hello_skill")()
-result = asyncio.run(skill.execute(SkillContext(project_id="demo", db=None, llm=None,
-                                                parameters={"text": "hello"})))
-print(result.data)   # {'upper': 'HELLO'}
-```
-
-### 2. Word 排版
-
-```python
-import asyncio
-from skills.docx_format import DocxFormatSkill
-from skill_engine.base import SkillContext
-
-skill = DocxFormatSkill()
-res = asyncio.run(skill.execute(SkillContext(
+ctx = SkillContext(
     project_id="demo", db=None, llm=None,
-    parameters={"file_path": "your.docx", "mode": "check"},
-)))
-print(res.data["total_issues"])   # 1218（真实标书实测：739 段 / 2149 run / 1218 处问题）
+    parameters={"bid_text": bid_text, "max_price": 100.0},
+)
+result = asyncio.run(PricingCheckSkill().execute(ctx))
+
+print(result.data["risk_level"])     # high
+for c in result.data["checks"]:
+    print(c["status"], c["check_type"], c["detail"])
+```
+
+输出（第 2 项算错 3 万，报价又贴着限价 —— 两处都会被人工漏掉）：
+
+```
+pass    price_limit      投标总价98.5万未超过限价100.0万
+pass    upper_lower_case 大写:玖拾捌万伍仟元 小写:985000元 (需人工确认一致)
+fail    arithmetic       第2项: 3.2×10.0=32.00≠35.0
+fail    safe_range       报价为限价98.5%，超出98%安全带上限
+```
+
+### Word 排版检查
+
+```python
+import asyncio
+from skill_engine.base import SkillContext
+from skills.docx_format import DocxFormatSkill
+
+ctx = SkillContext(
+    project_id="demo", db=None, llm=None,
+    parameters={"file_path": "你的标书.docx", "mode": "check"},
+)
+result = asyncio.run(DocxFormatSkill().execute(ctx))
+
+print(result.data["total_issues"])        # 1218（真实标书实测：739 段 / 2149 run）
+print(result.data["compliance_rate"])     # 43.3
 ```
 
 `mode` 支持 `format`（排版）/ `check`（检查）/ `diff`（与模板对比）/ `beautify`（XML 美化）。
 
-### 3. 修复坏 JSON
+### 暗标脱敏
 
 ```python
-from utils.json_repair import repair_json
-print(repair_json('{"a": 1, "b": [1,2,], }'))   # {'a': 1, 'b': [1, 2]}
+ctx = SkillContext(
+    project_id="demo", db=None, llm=None,
+    parameters={
+        "file_path": "投标文件.docx",
+        "company_names": ["某某科技有限公司", "某某科技"],
+        "region": "beijing",          # national / beijing / guangdong / jiangsu
+    },
+)
+result = asyncio.run(AnonBidCleanSkill().execute(ctx))
+print(result.data["passed"])          # 有 critical 项时为 False
 ```
+
+### 修复坏 JSON（大模型输出兜底）
+
+```python
+import asyncio
+from utils.json_repair import JsonRepairEngine
+
+engine = JsonRepairEngine()
+
+# 剥掉 <think> 标签与 markdown 代码块
+print(engine.extract_json('```json
+{"a": 1}
+```'))   # {"a": 1}
+
+# 修复常见破损（尾逗号 / 裸键 / 未闭合括号），失败不抛异常
+fixed = asyncio.run(engine.repair_and_validate('{"a": 1, "b": [1,2,], }'))
+print(fixed)                                             # {'a': 1, 'b': [1, 2]}
+```
+
+## 设计：为什么用「技能」而不是函数
+
+每个技能都是 `Skill` 子类，实现统一的 `execute(ctx) -> SkillResult`：
+
+```python
+class Skill(ABC):
+    name: str
+    description: str
+    category: str
+    version: str
+    triggers: list[str]
+    required_plan: str = "free"
+
+    @abstractmethod
+    async def execute(self, ctx: SkillContext) -> SkillResult: ...
+```
+
+好处：
+
+- **统一错误处理**：失败返回 `SkillResult(success=False, error=...)`，不抛异常
+- **统一进度回调**：长任务可通过 `ctx.progress_callback` 推进度
+- **可组合**：一个技能的输出（`SkillResult.data`）可以直接喂给下一个技能
+- **易测试**：不依赖 Web 框架、不依赖数据库（`db` / `llm` 都可为 `None`）
 
 ## 目录结构
 
 ```
-skill_engine/        # 技能发现 / 注册 / 执行契约
-  base.py            # Skill 基类、SkillContext、SkillResult、进度回调
-  loader.py          # 按 <root>/<category>/<skill>/SKILL.md 扫描
-  registry.py        # 技能注册表（按名字/分类查询）
-rules_engine/        # 规则包读取与过滤（纯标准库）
-pathkit/             # 路径解析（app_root / data_root）
-skills/              # 8 个零 LLM 技能，每个含 SKILL.md
-  docx_format/       # Word 排版（947 行）
-  anon_bid_clean/    # 文档脱敏（501 行）
-  rules_screen/      # 规则筛选（290 行）
-  check_report_export/  # 报告导出（244 行）
-  risk_score/        # 六维风险评分（210 行）
-  pricing_check/     # 报价算术核查（186 行）
-  selfcheck_list/    # 自检清单（168 行）
-  self_score/        # 自评分（83 行）
-utils/json_repair.py # 大模型坏 JSON 修复（335 行）
-examples/            # 最小示例技能
-tests/               # 35 条测试
+skill_engine/          # 技能引擎（基类 / 上下文 / 结果 / 注册表 / 加载器）
+rules_engine/          # 规则包读取与过滤（纯标准库）
+pathkit/               # 路径解析（app_root / data_root）
+skills/                # 8 个技能，每个含 SKILL.md
+  docx_format/
+  anon_bid_clean/
+  rules_screen/
+  check_report_export/
+  risk_score/
+  pricing_check/
+  selfcheck_list/
+  self_score/
+utils/json_repair.py   # 坏 JSON 修复
+examples/              # 最小可跑示例
+tests/                 # 81 条测试
 ```
 
-## 加入社群
+## 测试
 
-- 微信群 / 公众号：`docs/community.md`（含二维码）
-- 官网：<https://example.com/?utm_source=github&utm_medium=readme&utm_campaign=bidmaster-skills>
-- 问题反馈：GitHub Issues；商业合作与私有知识库能力见官网
+```bash
+pip install -e ".[dev]"
+pytest
+```
 
-## 关键词
+81 条，全部不依赖网络、不依赖真实标书文件、不调大模型。
 
-招投标 · 标书 · 投标文件 · 合规检查 · 清标 · 报价核查 · Word 排版 · docx · 格式检查 · 文档脱敏 · 风险评分 · 大模型结构化输出 · bidding · tender · RFP · skill-engine · LLM JSON repair
+## 边界（诚实说明）
+
+- **不含任何提示词**：解读、生成、围串标识别等需要大模型的能力不在本库
+- **不含私有知识库**：检索增强能力在主产品里，不在开源部分
+- **`docx_format` 只处理 .docx**：不处理 .doc / PDF / OFD
+- **正则匹配针对常见排版**：特殊格式可能漏匹配，此时对应检查项会返回 `warning` 而非静默通过
+- **`pricing_check` 只查算术与格式**：不判断报价是否「合理」，不预测中标概率
 
 ## 许可
 
@@ -133,6 +206,8 @@ tests/               # 35 条测试
 
 本库的 `skill_engine/`、`skills/docx_format/` 与 `utils/json_repair.py` **派生自 AGPL-3.0 上游项目** [BidMaster-Pro](https://github.com/guangshu100/BidMaster-Pro)（经由「老马标书贤内助」主仓），因此本仓库整体必须保持 AGPL-3.0，**不得改为 MIT 或其他更宽松许可**。上游归属与实测相似度见 `NOTICE`。
 
-本库是「老马标书贤内助」的开源子集：只包含**不依赖大模型**的通用引擎与文档处理能力，不含行业提示词、评分模型与私有知识库能力。
-
 如果你**分发**本库（含修改版、含打包进你的产品），AGPL-3.0 要求你保留归属声明并向接收者提供完整对应源代码；如果你**通过网络提供服务**，第 13 条要求你向服务使用者提供获取对应源代码的方式。仅在组织内部使用不触发上述义务。
+
+## 相关
+
+- 单技能精简版（零依赖，只含 `pricing_check`）：[bidmaster-pricing-check](https://github.com/maning636/bidmaster-pricing-check)

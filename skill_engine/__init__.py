@@ -20,11 +20,11 @@ __all__ = ["Skill", "SkillContext", "SkillResult", "SkillRegistry", "SkillLoader
 
 # 名字 -> 所在子模块。前三个数据契约集中在 base.py，其余按职责一一对应。
 _LAZY_EXPORTS: dict[str, str] = {
-    "Skill": "core.skill_engine.base",
-    "SkillContext": "core.skill_engine.base",
-    "SkillResult": "core.skill_engine.base",
-    "SkillRegistry": "core.skill_engine.registry",
-    "SkillLoader": "core.skill_engine.loader",
+    "Skill": "skill_engine.base",
+    "SkillContext": "skill_engine.base",
+    "SkillResult": "skill_engine.base",
+    "SkillRegistry": "skill_engine.registry",
+    "SkillLoader": "skill_engine.loader",
 }
 
 

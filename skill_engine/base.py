@@ -20,7 +20,6 @@ from uuid import UUID
 
 if TYPE_CHECKING:  # pragma: no cover - 仅用于类型检查
     import sqlalchemy.ext.asyncio
-    from core.llm_gateway import gateway as gateway_module
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +93,7 @@ class SkillContext:
 
     project_id: UUID | str
     db: "sqlalchemy.ext.asyncio.AsyncSession | None"
-    llm: "gateway_module.LLMGateway"
+    llm: Any  # LLM 网关实例；本仓库的技能均不调用大模型，保留以兼容契约
     parameters: dict = field(default_factory=dict)
     knowledge_base: Any = None
     progress_callback: ProgressCallback | None = None
