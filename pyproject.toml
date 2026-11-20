@@ -1,5 +1,5 @@
 [project]
-name = "bidmaster-skills"
+name = "laoma-bid-skills"
 version = "0.1.0"
 description = "投标文档处理技能集：8 个零大模型依赖的可组合技能（Word 排版 / 文档脱敏 / 报价核查 / 风险评分 / 规则筛查等）"
 readme = "README.md"
@@ -31,9 +31,9 @@ dependencies = [
 dev = ["pytest>=8.0", "ruff>=0.5"]
 
 [project.urls]
-Homepage = "https://github.com/maning636/bidmaster-skills"
-Source = "https://github.com/maning636/bidmaster-skills"
-Issues = "https://github.com/maning636/bidmaster-skills/issues"
+Homepage = "https://github.com/maning636/laoma-bid-skills"
+Source = "https://github.com/maning636/laoma-bid-skills"
+Issues = "https://github.com/maning636/laoma-bid-skills/issues"
 
 [build-system]
 requires = ["setuptools>=68"]

@@ -8,8 +8,8 @@
 
 | 项 | 状态 |
 |---|---|
-| 本地仓库 | ✅ `D:/dim开发/bidmaster-skills` |
-| GitHub | ✅ **Public**：https://github.com/maning636/bidmaster-skills |
+| 本地仓库 | ✅ `D:/dim开发/laoma-bid-skills` |
+| GitHub | ✅ **Public**：https://github.com/maning636/laoma-bid-skills |
 | 技能数 | **8 个**，全部零大模型依赖 |
 | 测试 | ✅ **81 条全绿** |
 | 许可 | AGPL-3.0 + NOTICE（上游归属写清） |
@@ -46,7 +46,7 @@
 ```bash
 cd /tmp && rm -rf _v && mkdir _v && cd _v
 "D:/dim开发/_bidmaster/.venv/Scripts/python.exe" -m pip install --no-deps --target ./site \
-  "git+https://github.com/maning636/bidmaster-skills.git"
+  "git+https://github.com/maning636/laoma-bid-skills.git"
 PYTHONPATH=./site "D:/dim开发/_bidmaster/.venv/Scripts/python.exe" -c "
 import asyncio
 from skill_engine.base import SkillContext
@@ -80,10 +80,10 @@ twine upload dist/*                          # 再发正式
 
 发完 README 的安装命令改成：
 ```bash
-pip install bidmaster-skills
+pip install laoma-bid-skills
 ```
 
-**注意**：先查 https://pypi.org/project/bidmaster-skills/ 是否被占。
+**注意**：先查 https://pypi.org/project/laoma-bid-skills/ 是否被占。
 
 ### P3 · 内容分发（1–2 天）
 
@@ -101,8 +101,8 @@ pip install bidmaster-skills
 
 | 仓库 | 内容 | 定位 |
 |---|---|---|
-| **bidmaster-skills**（本仓库） | 8 个技能完整版 | 主推，面向团队/项目使用 |
-| bidmaster-pricing-check | 只含 `pricing_check` | 单技能精简版，零依赖，面向快速试用 |
+| **laoma-bid-skills**（本仓库） | 8 个技能完整版 | 主推，面向团队/项目使用 |
+| laoma-bid-pricing-check | 只含 `pricing_check` | 单技能精简版，零依赖，面向快速试用 |
 
 **建议**：README 里已互相引用。推广时先推单技能版（门槛低），引导到完整版。
 
@@ -142,7 +142,7 @@ pip install bidmaster-skills
 
 ## 8. 验收标准
 
-- [ ] `pip install git+https://github.com/maning636/bidmaster-skills.git` 成功
+- [ ] `pip install git+https://github.com/maning636/laoma-bid-skills.git` 成功
 - [ ] 8 个技能全部可 import
 - [ ] `pytest` 81 条全绿
 - [ ] GitHub Topics ≥ 6 个、About 已填
@@ -156,6 +156,6 @@ pip install bidmaster-skills
 ## 9. 参考
 
 - 主仓：`D:/dim开发/_bidmaster`
-- 单技能版：`D:/dim开发/bidmaster-skills-pricing`
+- 单技能版：`D:/dim开发/laoma-bid-skills-pricing`
 - 各技能契约：`skills/*/SKILL.md`
 - 上游归属：`NOTICE`

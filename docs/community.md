@@ -2,7 +2,7 @@
 
 ## 问题反馈
 
-优先用 GitHub Issues：<https://github.com/maning636/bidmaster-skills/issues>
+优先用 GitHub Issues：<https://github.com/maning636/laoma-bid-skills/issues>
 
 提 issue 时请带上：
 

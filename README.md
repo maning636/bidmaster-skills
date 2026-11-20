@@ -1,4 +1,4 @@
-# bidmaster-skills
+# laoma-bid-skills
 
 **给 AI Agent 用的投标文档处理技能集** —— 8 个技能，**确定性执行，不调用大模型**。
 
@@ -112,7 +112,7 @@ Agent 拿到结构化结果，组织成人类能读的报告
 └──────────────┬──────────────────────┘
                │ 调用（工具调用 / function calling）
 ┌──────────────▼──────────────────────┐
-│  bidmaster-skills（本库）             │  ← 确定性执行、结构化返回
+│  laoma-bid-skills（本库）             │  ← 确定性执行、结构化返回
 │  pricing_check / docx_format / ...   │
 └──────────────┬──────────────────────┘
                │ SkillResult(success, data, error)
@@ -158,7 +158,7 @@ Agent 拿到结构化结果，组织成人类能读的报告
 ## 安装
 
 ```bash
-pip install git+https://github.com/maning636/bidmaster-skills.git
+pip install git+https://github.com/maning636/laoma-bid-skills.git
 ```
 
 第三方依赖只有 `python-docx` / `lxml` / `PyYAML`（后两个是 python-docx 的依赖）。
@@ -445,4 +445,4 @@ pytest
 
 ## 相关
 
-- 单技能精简版（零依赖，只含 `pricing_check`）：[bidmaster-pricing-check](https://github.com/maning636/bidmaster-pricing-check)
+- 单技能精简版（零依赖，只含 `pricing_check`）：[laoma-bid-pricing-check](https://github.com/maning636/laoma-bid-pricing-check)
