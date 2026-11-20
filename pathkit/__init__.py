@@ -5,7 +5,7 @@
 - data_root = %APPDATA%/laoma-bid（可写：data/projects/chroma_db/uploads/输出）
 开发时两者都 = 项目根，行为与现在完全一致。
 
-可写目录可用环境变量 BIDMASTER_DATA_DIR 覆盖（测试/多实例时有用）。
+可写目录可用环境变量 LAOMA_DATA_DIR 覆盖（测试/多实例时有用）。
 """
 
 from __future__ import annotations
@@ -33,8 +33,11 @@ def app_root() -> Path:
 
 
 def data_root() -> Path:
-    """可写数据根：打包后 %APPDATA%/laoma-bid（可用 BIDMASTER_DATA_DIR 覆盖），开发为项目根。"""
-    env = os.environ.get("BIDMASTER_DATA_DIR")
+    """可写数据根：打包后 %APPDATA%/laoma-bid，开发为项目根。
+
+    环境变量覆盖：``LAOMA_DATA_DIR``（新）/ ``BIDMASTER_DATA_DIR``（旧，兼容）。
+    """
+    env = os.environ.get("LAOMA_DATA_DIR") or os.environ.get("BIDMASTER_DATA_DIR")
     if env:
         return Path(env)
     if is_frozen():

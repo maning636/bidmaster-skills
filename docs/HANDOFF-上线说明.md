@@ -8,7 +8,7 @@
 
 | 项 | 状态 |
 |---|---|
-| 本地仓库 | ✅ `D:/dim开发/laoma-bid-skills` |
+| 本地仓库 | ✅ 本仓库 |
 | GitHub | ✅ **Public**：https://github.com/maning636/laoma-bid-skills |
 | 技能数 | **8 个**，全部零大模型依赖 |
 | 测试 | ✅ **81 条全绿** |
@@ -45,9 +45,9 @@
 
 ```bash
 cd /tmp && rm -rf _v && mkdir _v && cd _v
-"D:/dim开发/_bidmaster/.venv/Scripts/python.exe" -m pip install --no-deps --target ./site \
+python -m pip install --no-deps --target ./site \
   "git+https://github.com/maning636/laoma-bid-skills.git"
-PYTHONPATH=./site "D:/dim开发/_bidmaster/.venv/Scripts/python.exe" -c "
+PYTHONPATH=./site python -c "
 import asyncio
 from skill_engine.base import SkillContext
 from skills import PricingCheckSkill
@@ -155,7 +155,7 @@ pip install laoma-bid-skills
 
 ## 9. 参考
 
-- 主仓：`D:/dim开发/_bidmaster`
-- 单技能版：`D:/dim开发/laoma-bid-skills-pricing`
+- 主仓：私有（未公开）
+- 单技能版：https://github.com/maning636/laoma-bid-pricing-check
 - 各技能契约：`skills/*/SKILL.md`
 - 上游归属：`NOTICE`
